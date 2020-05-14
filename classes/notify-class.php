@@ -56,6 +56,11 @@ To review activity on your account visit {profile_url} or login to your admin on
 ','wp-user-sentry');
     }
     $message = apply_filters( 'wp_user_sentry_email_message', $message );
+    if( isset( $settings['notify_login_email_subject'] ) ){
+      $subject = $settings['notify_login_email_subject'];
+    }else{
+      $subject = __('Successful login');
+    }
     $user_info = new \wp_user_sentry\User;
     $device = $user_info->getDevice();
     $profile_url = admin_url( 'profile.php#wp-user-sentry-session' );
@@ -96,7 +101,7 @@ To review activity on your account visit {profile_url} or login to your admin on
     $blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
     $email = [
       'to' => $user->user_email,
-      'subject' => __( '['. $blogname .'] Successful login' ),
+      'subject' => __( '['. $blogname .'] '.$subject ),
       'message' => $message,
       'headers' => ''
     ];

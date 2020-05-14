@@ -42,6 +42,13 @@ class Admin{
       'wp_user_sentry_settings_section'
     );
     add_settings_field(
+      'notify_login_email_subject',
+      __('Email Message Subject'),
+      [ __NAMESPACE__ .'\Admin' ,'fieldEmailSubjectRender'],
+      'wp-user-sentry-settings',
+      'wp_user_sentry_settings_section'
+    );
+    add_settings_field(
       'notify_login_email',
       __('Email Message Contents'),
       [ __NAMESPACE__ .'\Admin' ,'fieldEmailRender'],
@@ -155,6 +162,22 @@ To review activity on your account visit {profile_url} or login to your admin on
     ?>
     <textarea name="wp_user_sentry_settings[notify_login_email]" class="large-text code" rows="8" spellcheck="false"><?php echo $contents  ?></textarea>
     <p class="description"><?php _e( 'The following dyanmic parameters may be added:','wp-user-sentry' ); ?> <strong>{displayname}, {user_login}, {ip}, {os}, {browser}, {country}, {flag}, {time}, {profile_url}, {homeurl}</strong></p>
+    <?php
+  }
+  /**
+   * Input Field for subject
+   * @access public static
+   * @since 1.1.0
+   */
+  static function fieldEmailSubjectRender(){
+    $options = get_option( 'wp_user_sentry_settings' );
+    if( !isset( $options['notify_login_email_subject'] )){
+      $subject = __('Successful login');
+    }else{
+      $subject = $options['notify_login_email_subject'];
+    }
+    ?>
+    <input type="text" name="wp_user_sentry_settings[notify_login_email_subject]" value="<?php echo $subject;  ?>">
     <?php
   }
 
