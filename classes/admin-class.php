@@ -36,7 +36,7 @@ class Admin{
     );
     add_settings_field(
       'notify_login_repeat',
-      __('Email on repeat logins from same IP & Useragent'),
+      __('Email on repeat logins from same IP & Useragent?'),
       [ __NAMESPACE__ .'\Admin' ,'fieldRepeatRender'],
       'wp-user-sentry-settings',
       'wp_user_sentry_settings_section'
@@ -76,7 +76,7 @@ class Admin{
    * @since 0.4.0
    */
   static function settingsCallback(){
-    ?><p><?php _e( 'WP User Sentry provides additional login monitoring, notifying users of a successful login and providing a sessions table for each user in their profile','wp-user-sentry' ); ?></p><?php
+    ?><p><?php _e( 'WP User Sentry provides additional login monitoring, notifying users of a successful login and providing a sessions table for each user in their profile.','wp-user-sentry' ); ?></p><?php
   }
 
   /**
@@ -144,10 +144,11 @@ class Admin{
       $contents =
 'Hi, {display_name} [{user_login}],
 Your account on {homeurl} was logged into at {time},
-From a {os} machine running {browser}
-The IP address was {ip},{country}{flag}
+from a {os} machine running {browser}.
+The IP address was {ip},{country}{flag}.
 You are receiving this email to make sure it was you.
-To review activity on your account visit {profile_url} or login to your admin on {homeurl} and navigate to your profile.';
+To review activity on your account visit {profile_url} or login to your admin on {homeurl} and navigate to your profile.
+';
     }else{
       $contents = $options['notify_login_email'];
     }

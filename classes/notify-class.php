@@ -49,11 +49,11 @@ class Notify{
       $message = __(
 'Hi, {display_name} [{user_login}],
 Your account on {homeurl} was logged into at {time},
-From a {os} machine running {browser}
-The IP address was {ip},{country}{flag}
+from a {os} machine running {browser}.
+The IP address was {ip},{country}{flag}.
 You are receiving this email to make sure it was you.
 To review activity on your account visit {profile_url} or login to your admin on {homeurl} and navigate to your profile.
-      ','wp-user-sentry');
+','wp-user-sentry');
     }
     $message = apply_filters( 'wp_user_sentry_email_message', $message );
     $user_info = new \wp_user_sentry\User;

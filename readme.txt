@@ -2,33 +2,35 @@
 Contributors: tnash
 Tags: login, email, sessions
 Requires at least: 5.3
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 7.0
 Stable tag: trunk
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Sends an email, to user as they login, and provides an overview of sessions in profile
+Sends an email to the user, as they login, and provides an overview of sessions in profile
 == Description ==
-Notify Logins has three features:
+WP User Sentry has three features:
 
 = Email =
-Emails the user email address as set in their profile on successful login.
+Emails the user’s email address, as set in their profile, on successful login.
 Email provides information about the login, the time/browser/operating system and IP
 Optionally get location from remote third party service.
 
 = Profile View =
-Generates a table, from the "session data" for a user, to shows when they logged in and their session information including
+Generates a table, from the "session data" for a user, to shows when they logged in and their session information including:
 - Login Time
 - Browser
 - Operating System
-- Expiry Time (when the sesssion is due to expire)
+- Expiry Time (when the session is due to expire)
 
 = Settings Page =
-Provides  settings for the plugin under wp-admin->settings->WP User Sentry
+Provides settings for the plugin under wp-admin->settings->WP User Sentry
 
 Configure if you wish to use a third party GEOAPI provider for determining country
-Configure which roles, should have on login notifications enabled
+Configure which roles should have on login notifications enabled
 Configure the email being sent
-Configure If the email should be sent, if an existing session with same useragent and IP exists.
+Configure If the email should be sent, if an existing session with the same useragent and IP exists.
 
 
 = Actions & Filters =
@@ -42,17 +44,19 @@ Here is a list of action and filter hooks provided by the plugin:
 == Screenshots ==
 
 == Changelog ==
+1.0.0 - 5th May 2020
+ - Released on WordPress.org
 0.4.0 - 3rd May 2020
  - Change Name to WP User Sentry
- - Refactored To separate classes
+ - Refactored to separate classes
  - [New Feature] Option to select which roles should be notified on logins.
- - [New Feature] configuring email via settings
+ - [New Feature] Configuring email via settings
  - [New Feature] Disable sending emails, if already logged in with same IP/Browser combo
 0.3.0 - 9th April 2020
- - [New Feature] Setting Page, to allow using third party services to get IP address.
+ - [New Feature] Setting page to allow using third party services to get IP address.
  - [New Feature] getting Country from IP using ip-api.com
 0.2.0 - 9th April 2020
- - [Bug Fix] Removed Spurious class names from table
+ - [Bug Fix] Removed spurious class names from table
  - [Bug Fix] Added colspan 5 to table when no sessions exist (props @philmorrow)
  - [Bug Fix] Fixed typo in email (props @babsaul)
 0.1.0 - 9th April 2020 - Initial Development Version
