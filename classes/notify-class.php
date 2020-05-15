@@ -41,9 +41,11 @@ class Notify{
    * @param  object $user
    * @return bool
    */
-  static function sendEmail( $user ){
+  static function sendEmail( $user, $email=false ){
     $settings = get_option( 'wp_user_sentry_settings' );
-    if( isset( $settings['notify_login_email'] ) ){
+    if( !empty( $email ) && isset( $email['message'] )){
+      $message = $email['message'];
+    }elseif( isset( $settings['notify_login_email'] ) ){
       $message = $settings['notify_login_email'];
     }else{
       $message = __(
@@ -56,7 +58,9 @@ To review activity on your account visit {profile_url} or login to your admin on
 ','wp-user-sentry');
     }
     $message = apply_filters( 'wp_user_sentry_email_message', $message );
-    if( isset( $settings['notify_login_email_subject'] ) ){
+    if( !empty( $email ) && isset( $email['subject'] )){
+      $subject = $email['subject'];
+    }elseif( isset( $settings['notify_login_email_subject'] ) ){
       $subject = $settings['notify_login_email_subject'];
     }else{
       $subject = __('Successful login');

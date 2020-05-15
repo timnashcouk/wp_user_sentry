@@ -55,6 +55,14 @@ class Admin{
       'wp-user-sentry-settings',
       'wp_user_sentry_settings_section'
     );
+
+    /*
+     * Test Email Hooks
+     */
+    add_action( 'wp_ajax_wp-user-sentry-test-email', [__NAMESPACE__ .'\Admin', 'sendTestEmailCallback' ]);
+
+    add_action( 'admin_footer', [__NAMESPACE__ .'\Admin', 'jsFooterRender' ]);
+
   }
 
   /**
@@ -162,6 +170,7 @@ To review activity on your account visit {profile_url} or login to your admin on
     ?>
     <textarea name="wp_user_sentry_settings[notify_login_email]" class="large-text code" rows="8" spellcheck="false"><?php echo $contents  ?></textarea>
     <p class="description"><?php _e( 'The following dyanmic parameters may be added:','wp-user-sentry' ); ?> <strong>{displayname}, {user_login}, {ip}, {os}, {browser}, {country}, {flag}, {time}, {profile_url}, {homeurl}</strong></p>
+    <button type="button" name="wp-user-sentry-test-email" class="button wp-user-sentry-test-email"><?php _e('Send Test Email','wp-user-sentry'); ?></button>
     <?php
   }
   /**
@@ -180,5 +189,73 @@ To review activity on your account visit {profile_url} or login to your admin on
     <input type="text" name="wp_user_sentry_settings[notify_login_email_subject]" value="<?php echo $subject;  ?>">
     <?php
   }
+  /**
+   * Javascript in Footer
+   * @access public static
+   * @since 1.1.0
+   */
+  static function jsFooterRender(){
+    $screen = get_current_screen();
+    if( $screen->id !== 'settings_page_wp-user-sentry-settings') return;
+    $ajax_nonce = wp_create_nonce( "wp-user-sentry-test-email" );
+    ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('.wp-user-sentry-test-email').click(function(){
+            var subject = $('input[name="wp_user_sentry_settings[notify_login_email_subject]"]').val();
+            var contents = $.trim( $('textarea[name="wp_user_sentry_settings[notify_login_email]"]').val() );
+            var data = {
+                action: 'wp-user-sentry-test-email',
+                security: '<?php echo $ajax_nonce; ?>',
+                subject: subject,
+                message: contents
+            };
+            $.post(ajaxurl, data, function(response) {
+              const res = JSON.parse(response);
+              if(res.type == "success"){
+                jQuery('#wpbody-content').prepend('<div class="notice notice-success is-dismissible"><p><?php _e( 'Test Email Sent to: ' ); ?>'+ res.email +'</p></div>');
+              }
+              else{
+                jQuery('#wpbody-content').prepend('<div class="notice notice-error is-dismissible"><p><?php _e( 'Test Email Failed to send' ); ?></p></div>');
+              }
+            });
+        });
+    });
+    </script>
+    <?php
+  }
+
+  /**
+   * Test Email AJAX Callback
+   * @access public static
+   * @since 1.1.0
+   */
+  static function sendTestEmailCallback(){
+    check_ajax_referer( 'wp-user-sentry-test-email', 'security');
+    if( ! current_user_can( 'manage_options' ) ){
+      exit();
+    }
+    $user = wp_get_current_user();
+    $email = [];
+    if( isset( $_POST['subject'] )){
+      $email['subject'] = $_POST['subject'];
+    }
+    if( isset( $_POST['message'] )){
+      $email['message'] = $_POST['message'];
+    }
+    if( \wp_user_sentry\Notify::sendEmail( $user, $email ) ){
+
+      echo json_encode([
+        'type' => 'success',
+        'email'  => $user->user_email
+      ]);
+    }else{
+      echo json_code([
+        'type' => 'fail'
+      ]);
+    }
+    exit();
+  }
+
 
 }
