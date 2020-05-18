@@ -30,10 +30,11 @@ class wp_user_sentry{
 	    $class = str_replace( '_', '-', $class );
       require_once __DIR__ . '/classes/' . $class . '-class.php';
     });
-    add_action( 'show_user_profile', [ __NAMESPACE__ .'\\Profile', 'userProfile'], 0 );
-    add_action( 'edit_user_profile', [ __NAMESPACE__ .'\\Profile', 'userProfile'], 0 );
-    add_action( 'wp_login', [ __NAMESPACE__ .'\\Notify' , 'runNotify'] );
-    add_action( 'admin_init', [ __NAMESPACE__ .'\\Admin', 'adminInit'] );
+    add_action( 'show_user_profile', [ __NAMESPACE__ .'\\Profile', 'userProfile' ], 0 );
+    add_action( 'edit_user_profile', [ __NAMESPACE__ .'\\Profile', 'userProfile' ], 0 );
+    add_action( 'wp_login', [ __NAMESPACE__ .'\\Notify' , 'runNotify' ] );
+    add_action( 'admin_init', [ __NAMESPACE__ .'\\Admin', 'adminInit' ] );
+    add_filter( 'heartbeat_received', [ __NAMESPACE__ .'\\Heartbeat', 'beat' ], 10, 2 );
     add_action( 'admin_menu', function(){
       add_options_page(
         __('WP User Sentry'),
