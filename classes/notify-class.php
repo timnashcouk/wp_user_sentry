@@ -20,18 +20,20 @@ class Notify{
       $user = get_user_by( 'login', $user_login );
     }
     $settings = get_option( 'wp_user_sentry_settings' );
+    $send = true;
     if( isset( $settings['notify_login_roles'] ) && is_array( $settings['notify_login_roles'] ) ) {
       if( !array_intersect( $user->roles, $settings['notify_login_roles'] ) ){
-        return true;
+        $send = false;
       }
     }
 
     if( isset( $settings['notify_login_repeat'] ) && '2' === $settings['notify_login_repeat'] ){
       if( true === \wp_user_sentry\Notify::compareSessions( $user->ID ) ){
-        return true;
+        $send = false;
       }
     }
-
+    $send = apply_filters( 'wp_user_sentry_notify', $send, $user->ID );
+    if( true !== $send ) return true;
     return \wp_user_sentry\Notify::sendEmail( $user );
   }
   /**
