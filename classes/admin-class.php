@@ -105,9 +105,21 @@ class Admin{
     <select name='wp_user_sentry_settings[geo_api_service]'>
        <option value='1' <?php selected( $options['geo_api_service'], '1' ); ?>>None</option>
        <option value='2' <?php selected( $options['geo_api_service'], '2' ); ?>>ip-api.com</option>
+      <?php
+        if( self::testMaxMindPresence() ){
+          ?>
+       <option value='3' <?php selected( $options['geo_api_service'], '3' ); ?>>WooCommerce GeoAPI</option>
+          <?php
+        }
+      ?>
    </select>
    <p class="description"><?php _e( 'If enabled, each login IP will be sent to third party service.','wp-user-sentry' ); ?></p>
     <?php
+    if( class_exists( 'woocommerce' ) && !self::testMaxMindPresence() ){
+      ?>
+      <p class="description"><?php _e( 'To use WooCommerce GEO API configure it first.','wp-user-sentry' ); ?></p>
+      <?php
+    }
   }
   /**
    * Multi checkbox for selecting which roles should be set.
@@ -255,6 +267,13 @@ To review activity on your account visit {profile_url} or login to your admin on
       ]);
     }
     exit();
+  }
+
+  static public function testMaxMindPresence(){
+    $return = false;
+    $wooCommerce_GeoAPI = get_option( 'woocommerce_maxmind_geolocation_settings' );
+    if( class_exists( 'woocommerce' ) && !empty( $wooCommerce_GeoAPI ) && isset($wooCommerce_GeoAPI['license_key'])) $return = true;
+    return $return;
   }
 
 

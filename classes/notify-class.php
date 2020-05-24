@@ -71,13 +71,14 @@ To review activity on your account visit {profile_url} or login to your admin on
     $device = $user_info->getDevice();
     $profile_url = admin_url( 'profile.php#wp-user-sentry-session' );
 
-    if( isset($settings['geo_api_service']) && '2' === $settings['geo_api_service']){
+    $country = '';
+    $flag = '';
+    if( isset( $settings['geo_api_service'] ) ){
       $geo = $user_info->getCountry( $device['ip'] );
-      $country = $geo['country'];
-      $flag = $user_info->emojiFlag($geo['code']);
-    }else{
-      $country = '';
-      $flag = '';
+      if( !empty( $geo ) ){
+        $country = $geo['country'];
+        $flag = $user_info->emojiFlag($geo['code']);
+      }
     }
     $message = str_replace([
       '{user_login}',

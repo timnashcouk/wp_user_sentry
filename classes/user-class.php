@@ -75,13 +75,28 @@ class User{
    ];
  }
 
+/**
+ * GetCountry Code from 3rd Party Services
+ * @param  string $IP
+ * @return string Country Code
+ */
+public function getCountry( $ip ){
+  $settings = get_option( 'wp_user_sentry_settings' );
+  if( isset($settings['geo_api_service']) && '2' === $settings['geo_api_service']){
+    return $this->getCountryIPAPI( $ip );
+  }
+  if( isset($settings['geo_api_service']) && '3' === $settings['geo_api_service']){
+    return $this->getCountryWooCommerce( $ip );
+  }
+  return false;
+}
  /**
   * Get Country from ip-api.com
-  * @access public
+  * @access protected
   * @param  string $ip
-  * @return string   Country Name
+  * @return string   Country Code
   */
- public function getCountry( $ip ){
+ protected function getCountryIPAPI( $ip ){
    $url = 'http://ip-api.com/json/'.$ip.'?fields=country,countryCode,query';
    $json = wp_remote_get( $url );
    try{
@@ -101,6 +116,28 @@ class User{
    }
     return false;
  }
+
+ /**
+  * Get Country from WooCommerce MaxMind DB
+  * @access protected
+  * @param  string $ip
+  * @return string   Country Code
+  * @todo Generate Name from Country Code because Woo Doesn't return it
+  */
+protected function getCountryWooCommerce( $ip ){
+  if( class_exists( 'WC_Geolocation' ) ){
+    $country = \WC_Geolocation::geolocate_ip( $ip );
+    if(!empty( $country ) && isset( $country['country'] )){
+     $code =  $country['country'];
+     return [
+       'country' => filter_var( $code, FILTER_SANITIZE_SPECIAL_CHARS ),
+       'code'    =>filter_var( $code, FILTER_SANITIZE_SPECIAL_CHARS )
+     ];
+    }
+  }
+  return false;
+}
+
 
  public function emojiFlag($code) {
 
