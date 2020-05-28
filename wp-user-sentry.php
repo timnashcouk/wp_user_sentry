@@ -8,7 +8,7 @@ namespace wp_user_sentry;
  * Author URI:      https://timnash.co.uk
  * Text Domain:     wp-user-sentry
  * Domain Path:     /languages
- * Version:         1.0.0
+ * Version:         1.1.0
  *
  */
 class wp_user_sentry{

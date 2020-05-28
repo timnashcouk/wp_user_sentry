@@ -45,6 +45,11 @@ Here is a list of action and filter hooks provided by the plugin:
 == Screenshots ==
 
 == Changelog ==
+1.1.0 - 28th May 2020
+ - [New Feature] WooCommerce GEOAPI integration for determinging country
+ - [New Feature] Modify Subject field
+ - [New Feature] Send Test Email
+ - [New Feature] Added notify_login_roles to allow plugins/themes to filter if email should be sent
 1.0.0 - 5th May 2020
  - Released on WordPress.org
 0.4.0 - 3rd May 2020
