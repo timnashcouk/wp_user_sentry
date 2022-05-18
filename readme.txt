@@ -2,7 +2,7 @@
 Contributors: tnash
 Tags: login, email, sessions
 Requires at least: 5.3
-Tested up to: 5.8
+Tested up to: 6.0
 Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv2 or later
